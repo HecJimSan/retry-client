@@ -1,3 +1,5 @@
 
 <h1>{{response?response:'NOTHING'}}</h1>
+<h2>{{tries===0?'':tries}}</h2>
+<h2>Timout: {{timeLeft/1000}} seconds</h2>
 <button (click)="request()">Make a request</button>

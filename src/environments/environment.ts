@@ -3,6 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  delay: 1500,
+  timeout: 10000,
   production: false
 };
 

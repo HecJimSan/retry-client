@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, retryWhen, delay, timeout, catchError } from 'rxjs/operators';
-import { of, throwError } from 'rxjs';
+import { of, throwError, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
-const timeoutVal = 130000;
-const delayTime = 1000;
+const timeoutVal = environment.timeout;
+const delayTime = environment.delay;
 
 @Component({
   selector: 'app-root',
@@ -13,17 +14,23 @@ const delayTime = 1000;
 })
 export class AppComponent {
   response: string;
-  tries = 1;
+  tries = 0;
+  timeLeft = timeoutVal;
+  interval;
+
 
   constructor(public httpClient: HttpClient) {}
 
   request(): void {
     this.response = 'START';
+    this.startTimer();
     this.httpClient.get('http://localhost:3000').pipe(
       tap((val: any) => {
         if (val.status !== 'COMPLETE') {
           throw val;
         }
+
+        this.resetTimer();
         console.log(`OK!`);
       }),
       retryWhen(errors => errors.pipe(
@@ -32,6 +39,7 @@ export class AppComponent {
           if (val.status === 'COMPLETE') {
             throw val;
           }
+          this.tries++;
           console.log(`Retrying...`);
         }),
         delay(delayTime),
@@ -40,7 +48,30 @@ export class AppComponent {
       catchError(error => throwError(`Request timed out`)),
     ).subscribe((value: any) => {
       const res = value.status;
-      this.response = `COMPLETE with response: ${res}`;
-    }, error => console.log(error));
+      this.response = `${res}`;
+    }, error => {
+      this.resetTimer();
+      console.log(error);
+    });
+  }
+
+
+
+
+
+  private startTimer(): void {
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        this.timeLeft = timeoutVal;
+      }
+    }, 1);
+  }
+
+  private resetTimer(): void {
+    clearInterval(this.interval);
+    this.timeLeft = timeoutVal;
+    this.tries = 0;
   }
 }
