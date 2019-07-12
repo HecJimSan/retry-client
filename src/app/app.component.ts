@@ -55,10 +55,6 @@ export class AppComponent {
     });
   }
 
-
-
-
-
   private startTimer(): void {
     this.interval = setInterval(() => {
       if (this.timeLeft > 0) {
