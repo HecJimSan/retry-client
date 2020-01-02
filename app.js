@@ -15,5 +15,13 @@ app.get('/', function (req, res) {
   body === 'COMPLETE' ? counter = 1 : counter++;
 });
  
+app.get('/request1/:id', function (req, res) {
+  setTimeout(() => res.send({time: req.params.id}), req.params.id? req.params.id: 100);
+});
+ 
+app.get('/request2/:id', function (req, res) {
+  setTimeout(() => res.send({time: req.params.id}),req.params.id? req.params.id: 100);
+});
+ 
 const port = 3000;
 app.listen(port,()=>console.log('Server is running in the port '+port))

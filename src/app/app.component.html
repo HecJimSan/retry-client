@@ -1,5 +1,53 @@
+<div class="main-card">
+    <h1>Rxjs by example</h1>
+    <div class="sub-card">
+        <h1>Retry based on a variable</h1>
+        <h2>{{response?response:'NOTHING'}}</h2>
+        <table style="margin-bottom: 16px;" class="header">
+            <tr>
+                <td>
+                    <h2>Timer: {{tries===0?'-':tries}}</h2>
+                </td>
+                <td align="right">
+                    <button (click)="request()">Make a request</button>
+                </td>
+            </tr>
+        </table>
+        <a href="https://www.learnrxjs.io/operators/error_handling/retrywhen.html" target="_blank">More info</a>
+    </div>
 
-<h1>{{response?response:'NOTHING'}}</h1>
-<h2>{{tries===0?'':tries}}</h2>
-<h2>Timout: {{timeLeft/1000}} seconds</h2>
-<button (click)="request()">Make a request</button>
+    <div class="sub-card">
+        <h1>Combine two observables</h1>
+        <p>Make two requests at the same time, wait for the last one to be done and trigger an event</p>
+        <table>
+            <tr>
+                <td>
+                    <h2>Timer: </h2>
+                </td>
+                <td>
+                    <h2> {{remainTime? remainTime: '-'}}</h2>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-bottom: 16px;" class="header">
+            <tr>
+                <td style="width:50%">
+                    <input type="number" (change)="collectNumber1($event.target.value)" placeholder="seconds...">
+                    <input type="number" (change)="collectNumber2($event.target.value)" placeholder="seconds...">
+                </td>
+                <td align="right">
+                    <button (click)="requestJoin()">Make a request</button>
+                </td>
+            </tr>
+        </table>
+
+        <div class="code">
+            <h2>{{responseCombine?'Response combined':''}}</h2>
+            <code>
+                {{responseCombine | json}}
+            </code>
+        </div>
+
+        <a href="https://www.learnrxjs.io/operators/combination/combinelatest.html" target="_blank">More info</a>
+    </div>
+</div>

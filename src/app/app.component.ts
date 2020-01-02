@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, map, retryWhen, delay, timeout, catchError } from 'rxjs/operators';
-import { of, throwError, Subject } from 'rxjs';
+import { of, throwError, Subject, Observable, merge, combineLatest } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 const timeoutVal = environment.timeout;
@@ -14,12 +14,21 @@ const delayTime = environment.delay;
 })
 export class AppComponent {
   response: string;
+  responseCombine: any;
   tries = 0;
   timeLeft = timeoutVal;
+  timeMax: number;
+  remainTime: number;
   interval;
+  intervalJoin;
+
+  input1: number;
+  input2: number;
+  loading: number;
+  isValid: boolean;
 
 
-  constructor(public httpClient: HttpClient) {}
+  constructor(public httpClient: HttpClient) { }
 
   request(): void {
     this.response = 'START';
@@ -55,6 +64,39 @@ export class AppComponent {
     });
   }
 
+  requestJoin(): void {
+    this.timeMax = Math.max(this.input1, this.input2)
+    this.startCounting();
+
+    const obserbable1: Observable<{}> = this.httpClient.get(`http://localhost:3000/request1/${this.input1}`);
+    const observable2: Observable<{}> = this.httpClient.get(`http://localhost:3000/request2/${this.input2}`);
+
+    combineLatest(obserbable1, observable2).subscribe((value) => {
+      this.resetTimerJoin();
+
+      this.responseCombine = value;
+      this.isValid = true;
+    }, () => this.isValid = false);
+  }
+
+  collectNumber1($event: string): void {
+    this.input1 = +$event * 1000;
+  }
+  collectNumber2($event: string): void {
+    this.input2 = +$event * 1000;
+  }
+
+  private startCounting(): void {
+    this.remainTime = 0;
+    this.intervalJoin = setInterval(() => {
+      if (this.remainTime < this.timeMax) {
+        this.remainTime++;
+      } else {
+        this.remainTime = this.timeMax;
+      }
+    }, 1000);
+  }
+
   private startTimer(): void {
     this.interval = setInterval(() => {
       if (this.timeLeft > 0) {
@@ -63,6 +105,10 @@ export class AppComponent {
         this.timeLeft = timeoutVal;
       }
     }, 1);
+  }
+
+  private resetTimerJoin(): void {
+    clearInterval(this.intervalJoin);
   }
 
   private resetTimer(): void {
