@@ -65,15 +65,13 @@ export class AppComponent {
   }
 
   requestJoin(): void {
-    this.timeMax = Math.max(this.input1, this.input2)
-    this.startCounting();
+    this.init();
 
     const obserbable1: Observable<{}> = this.httpClient.get(`http://localhost:3000/request1/${this.input1}`);
     const observable2: Observable<{}> = this.httpClient.get(`http://localhost:3000/request2/${this.input2}`);
 
     combineLatest(obserbable1, observable2).subscribe((value) => {
       this.resetTimerJoin();
-
       this.responseCombine = value;
       this.isValid = true;
     }, () => this.isValid = false);
@@ -84,6 +82,12 @@ export class AppComponent {
   }
   collectNumber2($event: string): void {
     this.input2 = +$event * 1000;
+  }
+
+  private init(): void{
+    this.timeMax = Math.max(this.input1, this.input2);
+    this.responseCombine = undefined;
+    this.startCounting();
   }
 
   private startCounting(): void {

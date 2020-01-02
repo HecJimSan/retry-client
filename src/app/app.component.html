@@ -13,7 +13,9 @@
                 </td>
             </tr>
         </table>
-        <a href="https://www.learnrxjs.io/operators/error_handling/retrywhen.html" target="_blank">More info</a>
+        <div class="link">
+            <a href="https://www.learnrxjs.io/operators/error_handling/retrywhen.html" target="_blank">More info</a>
+        </div>
     </div>
 
     <div class="sub-card">
@@ -42,12 +44,13 @@
         </table>
 
         <div class="code">
-            <h2>{{responseCombine?'Response combined':''}}</h2>
+            <h3>{{responseCombine?'Response':remainTime? 'Waiting response...': ''}}</h3>
             <code>
                 {{responseCombine | json}}
             </code>
         </div>
-
-        <a href="https://www.learnrxjs.io/operators/combination/combinelatest.html" target="_blank">More info</a>
+        <div class="link">
+            <a href="https://www.learnrxjs.io/operators/combination/combinelatest.html" target="_blank">More info</a>
+        </div>
     </div>
 </div>

@@ -47,3 +47,10 @@ button {
   .header {
       width: 100%;
   }
+
+  .code{
+      margin: 6px;
+  }
+  .link{
+      margin: 6px;
+  }
