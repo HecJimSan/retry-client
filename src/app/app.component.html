@@ -34,8 +34,12 @@
         <table style="margin-bottom: 16px;" class="header">
             <tr>
                 <td style="width:50%">
-                    <input type="number" (change)="collectNumber1($event.target.value)" placeholder="seconds...">
-                    <input type="number" (change)="collectNumber2($event.target.value)" placeholder="seconds...">
+                    <div [ngClass]="{'icon': input1Re? true: false}">
+                        <input type="number" (change)="collectNumber1($event.target.value)" placeholder="seconds...">
+                    </div>
+                    <div [ngClass]="{'icon': input2Re? true: false}">
+                        <input type="number" (change)="collectNumber2($event.target.value)" placeholder="seconds...">
+                    </div>
                 </td>
                 <td align="right">
                     <button (click)="requestJoin()">Make a request</button>
@@ -44,7 +48,12 @@
         </table>
 
         <div class="code">
-            <h3>{{responseCombine?'Response':remainTime? 'Waiting response...': ''}}</h3>
+            <div *ngIf="value1"><span [ngClass]="{'icon': input1Re? true: false}">Response 1: </span>{{value1 | json}}</div>
+            <div *ngIf="value2"><span [ngClass]="{'icon': input2Re? true: false}">Response 2: </span>{{value2 | json}}</div>
+            <div>
+                <h3 [ngClass]="{'icon': responseCombine? true: false}">
+                    {{responseCombine?'Combined Response ':remainTime? 'Waiting response...': ''}}</h3>
+            </div>
             <code>
                 {{responseCombine | json}}
             </code>

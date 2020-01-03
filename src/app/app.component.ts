@@ -21,11 +21,16 @@ export class AppComponent {
   remainTime: number;
   interval;
   intervalJoin;
+  input1Re: boolean;
+  input2Re: boolean;
 
   input1: number;
   input2: number;
   loading: number;
   isValid: boolean;
+
+  value1:any;
+  value2:any;
 
 
   constructor(public httpClient: HttpClient) { }
@@ -67,10 +72,18 @@ export class AppComponent {
   requestJoin(): void {
     this.init();
 
-    const obserbable1: Observable<{}> = this.httpClient.get(`http://localhost:3000/request1/${this.input1}`);
+    const observable1: Observable<{}> = this.httpClient.get(`http://localhost:3000/request1/${this.input1}`);
     const observable2: Observable<{}> = this.httpClient.get(`http://localhost:3000/request2/${this.input2}`);
 
-    combineLatest(obserbable1, observable2).subscribe((value) => {
+    observable1.subscribe((value)=> {
+      this.value1 = value;
+      this.input1Re = true;
+    });
+    observable2.subscribe((value)=> {
+      this.value2 = value;
+      this.input2Re = true;
+    });
+    combineLatest(observable1, observable2).subscribe((value) => {
       this.resetTimerJoin();
       this.responseCombine = value;
       this.isValid = true;
@@ -85,6 +98,8 @@ export class AppComponent {
   }
 
   private init(): void{
+    this.value1 = this.value2 = undefined;
+    this.input1Re = this.input2Re = false;
     this.timeMax = Math.max(this.input1, this.input2);
     this.responseCombine = undefined;
     this.startCounting();

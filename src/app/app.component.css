@@ -16,7 +16,7 @@
 
 input{
     height: 30px;
-    font-size: 30px;
+    font-size: 24px;
     width: 90%;
     margin: 6px;
 }
@@ -53,4 +53,9 @@ button {
   }
   .link{
       margin: 6px;
+  }
+
+  .icon::after{
+    content: '\2713';
+    color: green;
   }
